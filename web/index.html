@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Streaming Videos — analyse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css?v=9" />
+</head>
+<body>
+  <header>
+    <div>
+      <p class="kicker">Hash Code 2017</p>
+      <h1>Analyse instance + solution</h1>
+    </div>
+    <p class="hint">Un fichier .in (entree) et un fichier .out (solution). L'algorithme n'est pas dans l'interface : chacun peut brancher le sien.</p>
+  </header>
+
+  <main>
+    <aside>
+      <h2>Instances (.in)</h2>
+      <div id="dataset-list" class="list"></div>
+    </aside>
+
+    <section class="panel">
+      <div id="empty" class="empty">Selectionne une instance a gauche, puis un fichier .out.</div>
+
+      <div id="work" class="hidden">
+        <div class="title-row">
+          <div>
+            <h2 id="ds-name"></h2>
+            <p id="ds-meta" class="meta"></p>
+          </div>
+          <div class="solve-pick">
+            <label for="out-select">Solution (.out)</label>
+            <select id="out-select"></select>
+            <button id="btn-analyse" class="btn" type="button">Analyser</button>
+          </div>
+        </div>
+        <p id="out-hint" class="legend"></p>
+
+        <h3>Instance (entree)</h3>
+        <div class="cards" id="header-cards"></div>
+        <p id="insight" class="legend"></p>
+
+        <div class="grid-2">
+          <article>
+            <h4>Qui demande quoi (Zipf)</h4>
+            <canvas id="chart-zipf" height="160"></canvas>
+            <p class="legend">A gauche : videos tres demandees. Plus la courbe chute, plus le trafic est concentre.</p>
+          </article>
+          <article>
+            <h4>Qui voit quels caches</h4>
+            <canvas id="chart-heat" height="160"></canvas>
+            <p class="legend">Ligne = endpoint, colonne = cache. Case claire = pas de lien. Plus c'est fonce, plus la latence est elevee.</p>
+          </article>
+        </div>
+
+        <div id="solution-block" class="hidden">
+          <h3>Solution (.out)</h3>
+          <p id="sol-file" class="meta"></p>
+          <p id="warn-box" class="warn hidden"></p>
+          <div class="cards" id="score-cards"></div>
+          <div class="cards highlight" id="dup-cards"></div>
+          <p id="dup-legend" class="legend"></p>
+
+          <h4 class="inline">Occupation des caches</h4>
+          <div id="caches" class="caches"></div>
+
+          <div class="grid-2">
+            <article>
+              <h4>Taux de remplissage par cache (%)</h4>
+              <canvas id="chart-fillpct" height="160"></canvas>
+              <p class="legend">Mo utilises / capacite X. Une barre a 100 % = cache plein.</p>
+            </article>
+            <article>
+              <h4>Temps gagne par cache</h4>
+              <canvas id="chart-saved" height="160"></canvas>
+              <p class="legend">Millisecondes attribuees au cache le plus rapide. Seul ce cache compte pour le score.</p>
+            </article>
+          </div>
+
+          <div class="grid-2">
+            <article>
+              <h4>Duplication : copies par video</h4>
+              <canvas id="chart-presence" height="160"></canvas>
+              <p id="presence-legend" class="legend">1 = une seule copie. 2+ = video reproduite dans plusieurs caches.</p>
+            </article>
+            <article>
+              <h4>Combien de videos ont k copies</h4>
+              <canvas id="chart-duphist" height="160"></canvas>
+              <p class="legend">Barre k=1 : videos uniques. k=2, 3… : videos dupliquees.</p>
+            </article>
+          </div>
+
+          <article class="wide">
+            <h4>Volume de donnees par endpoint (DC vs caches)</h4>
+            <canvas id="chart-volume" height="180"></canvas>
+            <p class="legend">Gris = datacenter. Couleurs = cache qui sert vraiment (copie la plus rapide).</p>
+          </article>
+
+          <article class="wide" id="matrix-wrap">
+            <h4>Presence video × cache</h4>
+            <canvas id="chart-matrix" height="180"></canvas>
+            <p class="legend">Ligne = cache, colonne = video. Case bleue = presente. Plusieurs cases sur une colonne = duplication.</p>
+          </article>
+
+          <article class="wide" id="dup-table-wrap">
+            <h4>Videos dupliquees</h4>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Video</th><th>Copies</th><th>Taille (Mo)</th></tr>
+                </thead>
+                <tbody id="dup-table"></tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="chart-tip" class="hidden"></div>
+  <script src="/app.js?v=9"></script>
+</body>
+</html>
